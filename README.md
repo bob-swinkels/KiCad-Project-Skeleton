@@ -14,7 +14,7 @@ This skeleton provides three different GitHub workflows to process the KiCad fil
 - `KiBot - Generate Schematic Outputs` - You can run this action manually to gerarate pdf files of schematic and save the BOM as a CSV so you can import it in OctoPart. 
 - `KiBot - Release` - Runs when you create a GitHub release and automatically exports Gerber and assembly files for JLCPCB, a PDF file of the schematic, a CSV file of the BOM that you can import in OctoPart, an interactive HTML BOM, and a 3D-model (STEP) of the board.
 
-If you want would like export options for other manufacturers, please open an issue or make a pull request. 
+If you would like export options for other manufacturers, please open an issue or make a pull request. 
 
 ## Directory Outline
 - [`~/pcb/`](pcb) PCB project.
