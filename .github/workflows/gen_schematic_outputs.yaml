@@ -56,14 +56,14 @@ jobs:
       - name: Set schematic version
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          include: ".*.sch"
+          include: "pcb/kicad_project/*.sch"
           find: "%%version%%"
           replace: ${{ github.event.inputs.version }}
 
       - name: Set schematic date
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          include: ".*.sch"
+          include: "pcb/kicad_project/*.sch"
           find: "%%date%%"
           replace: ${{ steps.date.outputs.date }}
 
