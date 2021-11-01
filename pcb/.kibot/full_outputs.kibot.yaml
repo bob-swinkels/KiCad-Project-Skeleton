@@ -13,8 +13,7 @@ preflight:
   ignore_unconnected: true
 
 global:
-  # Sets the default output filename for all generated files. You likely don't have to change this.
-  output: "%f-%i.%x"
+  output: '%f_rev_%r-%i.%x'
 
 filters:
   - name: only_jlc_parts
@@ -23,6 +22,22 @@ filters:
     include_only:
       - column: 'LCSC#'
         regex: '^C\d+'
+
+  - name: 'empty_mfn_mfp'
+    type: 'generic'
+    comment: 'Remove components without MFN or MFP values'
+    exclude_any:
+      - column: 'MFN'
+        regex: '^$'
+      - column: 'MFP'
+        regex: '^$'
+
+  - name: 'mechanical'
+    type: 'generic'
+    comment: 'Remove mechanical components by reference.'
+    exclude_refs:
+    - H*
+    - Logo*
 
 variants:
   - name: rotated

@@ -3,12 +3,19 @@
 kibot:
   version: 1
 
+filters:
+  - name: 'mechanical'
+    type: 'generic'
+    comment: 'Remove mechanical components by reference.'
+    exclude_refs:
+    - H*
+    - Logo*
+
 preflight:
   run_erc: true
 
 global:
-  # Sets the default output filename for all generated files. You likely don't have to change this.
-  output: "%f-%i.%x"
+  output: '%f_rev_%r-%i.%x'
 
 # This imports the KiBot scripts that actuall do all the generation. If you want to
 # generate different things/more things then change these to point to other .kibot.yaml files.

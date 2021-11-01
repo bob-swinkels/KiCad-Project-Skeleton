@@ -11,6 +11,15 @@ filters:
     include_only:
       - column: 'LCSC#'
         regex: '^C\d+'
+  
+  - name: 'empty_mfn_mfp'
+    type: 'generic'
+    comment: 'Remove components without MFN or MFP values'
+    exclude_any:
+      - column: 'MFN'
+        regex: '^$'
+      - column: 'MFP'
+        regex: '^$'
 
 variants:
   - name: rotated
@@ -26,7 +35,7 @@ outputs:
     dir: assembly/JLCPCB
     options:
       variant: rotated
-      output: '%f_cpl_jlc.%x'
+      output: '%f_rev_%r-cpl_jlc.%x'
       format: CSV
       units: millimeters
       separate_files_for_front_and_back: false
@@ -50,7 +59,7 @@ outputs:
     type: bom
     dir: assembly/JLCPCB
     options:
-      output: '%f_%i_jlc.%x'
+      output: '%f_rev_%r-%i_jlc.%x'
       exclude_filter: 'only_jlc_parts'
       ref_separator: ','
       columns:
@@ -60,8 +69,27 @@ outputs:
           name: Designator
         - Footprint
         - field: 'LCSC#'
-          name: 'LCSC Part #'
+          name: 'JLCPCB Part #'
       csv:
         hide_pcb_info: true
         hide_stats_info: true
         quote_all: true
+  
+  - name: "Manual_placement_bom"
+    comment: "Bom for manual placement after JLCPCB assembly"
+    type: bom
+    dir: bom/JLCPCB
+    options:
+      output: '%f_rev_%r-%i_MANUAL_PLACEMENT.%x'
+      exclude_filter: ['!only_jlc_parts', 'empty_mfn_mfp']
+      csv:
+        hide_pcb_info: true
+        hide_stats_info: true
+        quote_all: true
+      columns:
+        - field: MFP
+          name: Part
+        - field: MFN
+          name: Manufacturer
+        - References
+        - Quantity Per PCB

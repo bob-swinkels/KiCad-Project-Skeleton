@@ -5,7 +5,15 @@
 
 kibot:
   version: 1
-  
+
+filters:
+  - name: 'mechanical'
+    type: 'generic'
+    comment: 'Remove mechanical components by reference.'
+    exclude_refs:
+    - H*
+    - Logo*
+
 outputs:
   - name: "print_front"
     comment: "PDF - front copper and user drawings"
@@ -156,4 +164,5 @@ outputs:
     comment: "Generate interactive BOM"
     type: ibom
     dir: "bom"
-    
+    options:
+      dnf_filter: ['_mechanical', 'mechanical', '_kibom_dnf']

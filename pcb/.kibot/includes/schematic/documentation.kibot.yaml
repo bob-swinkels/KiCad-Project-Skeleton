@@ -4,6 +4,14 @@
 kibot:
   version: 1
 
+filters:
+  - name: 'mechanical'
+    type: 'generic'
+    comment: 'Remove mechanical components by reference.'
+    exclude_refs:
+    - H*
+    - Logo*
+
 outputs:
   - name: "print_sch"
     comment: "PDF - print schematic"
@@ -15,14 +23,15 @@ outputs:
     type: bom
     dir: bom
     options:
-      blacklist: "DNF*"
+      exclude_filter: ['_mechanical', 'mechanical']
       csv:
         hide_pcb_info: true
         hide_stats_info: true
         quote_all: true
       columns:
-        - Part
-        - field: manf
+        - field: MFP
+          name: Part
+        - field: MFN
           name: Manufacturer
         - References
         - Quantity Per PCB
