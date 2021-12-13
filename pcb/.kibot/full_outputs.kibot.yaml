@@ -5,51 +5,23 @@ kibot:
 
 preflight:
   run_erc: true
-  run_drc: false
+  run_drc: true
+  update_xml: true
   
   # This is important to set to true so replacement of version and date strings in the release
   # build process works correctly.
   check_zone_fills: true
-  ignore_unconnected: true
 
 global:
   output: '%f_rev_%r-%i.%x'
 
-filters:
-  - name: only_jlc_parts
-    comment: 'Only parts with JLC (LCSC) code'
-    type: generic
-    include_only:
-      - column: 'LCSC#'
-        regex: '^C\d+'
-
-  - name: 'empty_mfn_mfp'
-    type: 'generic'
-    comment: 'Remove components without MFN or MFP values'
-    exclude_any:
-      - column: 'MFN'
-        regex: '^$'
-      - column: 'MFP'
-        regex: '^$'
-
-  - name: 'mechanical'
-    type: 'generic'
-    comment: 'Remove mechanical components by reference.'
-    exclude_refs:
-    - H*
-    - Logo*
-
-variants:
-  - name: rotated
-    comment: 'Just a place holder for the rotation filter'
-    type: kibom
-    variant: rotated
-    pre_transform: _rot_footprint
-
 # This imports the KiBot scripts that actuall do all the generation. If you want to
 # generate different things/more things then change these to point to other .kibot.yaml files.
 import:
-  - includes/schematic/documentation.kibot.yaml
-  - includes/pcb/documentation.kibot.yaml
-  - includes/pcb/JLCPCB_position.kibot.yaml
-  - includes/pcb/JLCPCB_stencil.kibot.yaml
+  - file: includes/schematic/documentation.kibot.yaml
+  - file: includes/pcb/documentation.kibot.yaml
+  - file: includes/pcb/generic_gerbers.kibot.yaml
+  - file: includes/pcb/Eurocircuits_position.kibot.yaml
+  - file: includes/pcb/Eurocircuits_fab_stencil.kibot.yaml
+  - file: includes/pcb/JLCPCB_position.kibot.yaml
+  - file: includes/pcb/JLCPCB_fab_stencil.kibot.yaml

@@ -40,19 +40,14 @@ jobs:
         id: project_name
         run: echo "::set-output name=project_name::$(find ./pcb/kicad_project -iname *.pro -execdir basename {} .pro ';')"
 
-      # Get the current date and time, in the timezone specified above, for use later.
-      - name: Get current date and time
-        id: date
-        run: echo "::set-output name=date::$(TZ='${{ env.Timezone }}' date +'%Y-%m-%d %T')"
-
       # Get the current date
       - name: Get current date
-        id: date_only
-        run: echo "::set-output name=date_only::$(TZ='${{ env.Timezone }}' date +'%Y-%m-%d')"
+        id: date
+        run: echo "::set-output name=date::$(TZ='${{ env.Timezone }}' date +'%Y-%m-%d')"
 
       # Do a string replacement in the schematic file to set the version and date.
       # Any instance of %%version%% in the schematic gets replaced with the release version.
-      # Any instance of %%date%% in the schematic gets replaced with the release date and time.
+      # Any instance of %%date%% in the schematic gets replaced with the release date.
       - name: Set schematic version
         uses: jacobtomlinson/gha-find-replace@master
         with:
@@ -70,7 +65,7 @@ jobs:
       # Actually run KiBot to generate all the files. The KiBot script used is
       # in the 1_pcb/.kibot/release.kibot.yaml folder.
       - name: Generate schematic documentation
-        uses: INTI-CMNB/KiBot@v1
+        uses: INTI-CMNB/KiBot@3acaa425740658045e0f1ecda7220e7dc6f7d2e3
         with:
           config: pcb/.kibot/schematic_outputs.kibot.yaml
           dir: ${{ env.OutputFolder }}
@@ -81,5 +76,5 @@ jobs:
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ steps.project_name.outputs.project_name }}-${{ github.event.inputs.version }}-${{ steps.date_only.outputs.date_only }}
+          name: ${{ steps.project_name.outputs.project_name }}-${{ github.event.inputs.version }}-${{ steps.date.outputs.date }}
           path: ${{ env.OutputFolder }}/**

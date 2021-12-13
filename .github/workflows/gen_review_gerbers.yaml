@@ -1,5 +1,5 @@
-# This workflow generates Gerbers for reviewing before release. 
-# The version number and date of the design is automatically updated on the PCB. 
+# This workflow generates Gerbers for reviewing before release.
+# The version number and date of the design is automatically updated on the PCB.
 # The version number is set via an environment variable
 # and by default is `gerb-review` since this runs outside of the release process
 # so there's no formal release number to use.
@@ -42,8 +42,8 @@ jobs:
 
       # Get the current date
       - name: Get current date
-        id: date_only
-        run: echo "::set-output name=date_only::$(TZ='${{ env.Timezone }}' date +'%Y-%m-%d')"
+        id: date
+        run: echo "::set-output name=date::$(TZ='${{ env.Timezone }}' date +'%Y-%m-%d')"
 
       # Do a string replacement in the PCB file to set the version and date.
       # Any instance of %%version%% in the schematic gets replaced with the release version.
@@ -60,21 +60,21 @@ jobs:
         with:
           include: "pcb/kicad_project/*.kicad_pcb"
           find: "%%date%%"
-          replace: ${{ steps.date_only.outputs.date_only }}
+          replace: ${{ steps.date.outputs.date }}
 
       # Actually run KiBot to generate all the files. The KiBot script used is
       # in the 1_pcb/.kibot/release.kibot.yaml folder.
       - name: Generate documentation
-        uses: INTI-CMNB/KiBot@v1
+        uses: INTI-CMNB/KiBot@3acaa425740658045e0f1ecda7220e7dc6f7d2e3
         with:
-          config: pcb/.kibot/review_gerber_outputs.kibot.yaml
+          config: pcb/.kibot/gerber_outputs.kibot.yaml
           dir: ${{ env.OutputFolder }}
-          schema: pcb/kicad_project/${{ steps.project_name.outputs.project_name }}.sch
           board: pcb/kicad_project/${{ steps.project_name.outputs.project_name }}.kicad_pcb
+          schema: pcb/kicad_project/${{ steps.project_name.outputs.project_name }}.sch
 
       # Archive all the artifacts from output and attach to the action's results.
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ steps.project_name.outputs.project_name }}-${{ github.event.inputs.version }}-${{ steps.date_only.outputs.date_only }}
+          name: ${{ steps.project_name.outputs.project_name }}-${{ github.event.inputs.version }}-${{ steps.date.outputs.date }}
           path: ${{ env.OutputFolder }}/**
