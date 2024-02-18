@@ -1,3 +1,6 @@
+> [!CAUTION]
+> This repository is no longer maintained! It is developed for KiCad version 5 and now we're steadily approaching KiCad 8. I may release something similar in the future when I need to work with KiCad again. Feel free to use this as a staring point to build something similar for a newer version of KiCad. 
+
 # KiCad Project Skeleton
 
 Project skeleton for KiCad projects with KiBot integration using GitHub Actions. Based on a Hackaday article \[1\] and two YouTube video's \[2,3\]: 
